@@ -1,19 +1,28 @@
- 🧑‍💼 Job Portal – Full Stack Web Application
-
-![Banner](./banner.png)
-
-A fully-featured **Job Portal Web Application** built with **React.js**, **Spring Boot**, and **MongoDB**. It allows **job seekers** to register and apply for jobs, while **employers** can post and manage job openings. The platform includes **JWT-based authentication**, MongoDB integration, and a modern, responsive UI.
+Here is your **corrected and professional `README.md`** with proper formatting, spacing, markdown structure, code blocks, emoji alignment, and clean section breaks.
 
 ---
 
- 🌐 Live Demo
+### ✅ Final Corrected Version
 
-- 🔹 **Frontend:** [https://job-portal.vercel.app](https://job-portal.vercel.app)
+````markdown
+# 🧑‍💼 Job Portal – Full Stack Web Application
+
+![Banner](./banner.png)
+
+> A fully-featured **Job Portal Web Application** built with **React.js**, **Spring Boot**, and **MongoDB**.  
+> It allows **job seekers** to register and apply for jobs, while **employers** can post and manage job openings.  
+> The platform includes **JWT-based authentication**, **MongoDB integration**, and a modern, responsive UI.
+
+---
+
+## 🌐 Live Demo
+
+- 🔹 **Frontend:** [https://job-portal.vercel.app](https://job-portal.vercel.app)  
 - 🔹 **Backend API:** [https://job-portal-backend.onrender.com](https://job-portal-backend.onrender.com)
 
 ---
 
- 🚀 Tech Stack
+## 🚀 Tech Stack
 
 | Layer      | Technology                                   |
 |------------|----------------------------------------------|
@@ -24,63 +33,99 @@ A fully-featured **Job Portal Web Application** built with **React.js**, **Sprin
 
 ---
 
- ✨ Features
+## ✨ Features
 
-👨‍💼 Job Seekers
-- Secure registration and login
+### 👨‍💼 Job Seekers
+- Secure registration and login (JWT)
 - Search and filter jobs by location, type, experience
 - Apply for jobs with resume upload
 - View application status in dashboard
 
- 🏢 Employers / Admin
+### 🏢 Employers / Admin
 - Post, edit, and delete job listings
 - View job applicants
 - Manage job posts from dashboard
 
 ---
 
+## ⚙️ How to Run Locally
 
-
----
-⚙️ How to Run Locally
-
-🔧 Backend
+### 🔧 Backend
 
 ```bash
 cd backend
- Update Mongo URI in application.properties
+# Update MongoDB URI in src/main/resources/application.properties
 mvn spring-boot:run
+````
 
-Backend default: http://localhost:8080
-
-cd frontend
-npm install
-npm start
-
-Frontend default: http://localhost:3000
-
-export const API_URL = 'http://localhost:8080/api';
-
-🧪 API Testing
-Use Postman or REST client to test:
-
-Method	Endpoint	Description
-POST	/api/auth/register	Register new user
-POST	/api/auth/login	Login and get token
-GET	/api/jobs	List available jobs
-POST	/api/jobs/apply	Apply for a job
+* Default backend URL: `http://localhost:8080`
 
 ---
 
-🤝 Contributing
-1.Fork the repository
+### 🔧 Frontend
 
-2.Create a branch: git checkout -b feature-name
+```bash
+cd frontend
+npm install
+npm start
+```
 
-3.Commit changes: git commit -m "Add new feature"
+* Default frontend URL: `http://localhost:3000`
 
-4.Push branch: git push origin feature-name
+> Set API base URL in frontend `src/api/config.js`:
 
-5.Create a Pull Request
+```js
+export const API_URL = 'http://localhost:8080/api';
+```
+
+---
+
+## 🧪 API Testing
+
+Use **Postman** or a REST client to test the following endpoints:
+
+| Method | Endpoint             | Description         |
+| ------ | -------------------- | ------------------- |
+| POST   | `/api/auth/register` | Register new user   |
+| POST   | `/api/auth/login`    | Login and get token |
+| GET    | `/api/jobs`          | List available jobs |
+| POST   | `/api/jobs/apply`    | Apply for a job     |
+
+---
+
+## 🤝 Contributing
+
+1. **Fork** the repository
+2. **Create a new branch**
+
+   ```bash
+   git checkout -b feature-name
+   ```
+3. **Commit your changes**
+
+   ```bash
+   git commit -m "Add new feature"
+   ```
+4. **Push the branch**
+
+   ```bash
+   git push origin feature-name
+   ```
+5. **Create a Pull Request**
+
+---
+
+## 📎 GitHub Repository
+
+**🔗 [https://github.com/Sambha13/job-portal](https://github.com/Sambha13/job-portal)**
+
+---
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE)
+
+```
+
 ---
 
