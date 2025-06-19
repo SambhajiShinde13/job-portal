@@ -40,10 +40,10 @@ A fully-featured **Job Portal Web Application** built with **React.js**, **Sprin
 ---
 
 
----
+
 
 ⚙️ How to Run Locally
-
+---
 🔧 Backend
 
 ```bash
@@ -52,7 +52,7 @@ cd backend
 mvn spring-boot:run
 
 Backend default: http://localhost:8080
----
+
 cd frontend
 npm install
 npm start
