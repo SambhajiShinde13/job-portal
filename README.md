@@ -52,7 +52,7 @@ cd backend
 mvn spring-boot:run
 
 Backend default: http://localhost:8080
-
+---
 cd frontend
 npm install
 npm start
@@ -69,7 +69,7 @@ POST	/api/auth/register	Register new user
 POST	/api/auth/login	Login and get token
 GET	/api/jobs	List available jobs
 POST	/api/jobs/apply	Apply for a job
-
+---
 🤝 Contributing
 1.Fork the repository
 
@@ -80,5 +80,5 @@ POST	/api/jobs/apply	Apply for a job
 4.Push branch: git push origin feature-name
 
 5.Create a Pull Request
-
+---
 
