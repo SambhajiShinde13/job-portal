@@ -7,7 +7,7 @@
 ````markdown
 # 🧑‍💼 Job Portal – Full Stack Web Application
 
-![Banner]([banner.png](https://raw.githubusercontent.com/Sambha13/job-portal/master/banner.png))
+![Banner](https://raw.githubusercontent.com/Sambha13/job-portal/master/banner.png)
 
 
 > A fully-featured **Job Portal Web Application** built with **React.js**, **Spring Boot**, and **MongoDB**.  
