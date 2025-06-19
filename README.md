@@ -2,7 +2,7 @@
 
 ---
 
-### ✅ Final Corrected Version
+
 
 ````markdown
 # 🧑‍💼 Job Portal – Full Stack Web Application
