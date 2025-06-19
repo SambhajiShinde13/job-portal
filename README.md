@@ -7,7 +7,8 @@
 ````markdown
 # 🧑‍💼 Job Portal – Full Stack Web Application
 
-![Banner](https://raw.githubusercontent.com/Sambha13/job-portal/master/banner.png)
+![Banner](https://github.com/Sambha13/job-portal/blob/master/banner.png?raw=true)
+
 
 
 
