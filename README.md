@@ -41,13 +41,13 @@ A fully-featured **Job Portal Web Application** built with **React.js**, **Sprin
 
 
 
-
+---
 ⚙️ How to Run Locally
 
----
 
 
- 
+
+ ---
 🔧 Backend
 
 ```bash
@@ -74,7 +74,7 @@ POST	/api/auth/login	Login and get token
 GET	/api/jobs	List available jobs
 POST	/api/jobs/apply	Apply for a job
 
----
+
 
 
  
