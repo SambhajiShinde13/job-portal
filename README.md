@@ -46,6 +46,7 @@ A fully-featured **Job Portal Web Application** built with **React.js**, **Sprin
 
 ---
 
+
  
 🔧 Backend
 
@@ -74,6 +75,7 @@ GET	/api/jobs	List available jobs
 POST	/api/jobs/apply	Apply for a job
 
 ---
+
 
  
 🤝 Contributing
