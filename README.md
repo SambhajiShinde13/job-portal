@@ -177,16 +177,16 @@ job-portal/
 │   └── public/               # Static assets
 └── README.md                 # Project documentation
 
-🤝 Contributing
 
-Fork the repository.
-Create a new branch: git checkout -b feature-name
-Commit changes: git commit -m "Add feature"
-Push to the branch: git push origin feature-name
-Create a Pull Request.
 
-🔮 Future Improvements
+🤝 Contribution Steps
+1.Fork this repo
 
-Add real-time notifications for job application updates
-Implement AI-based job recommendations
-Integrate OAuth for social logins
+2.Create your branch: git checkout -b feature-name
+
+3.Commit changes: git commit -m "Added feature"
+
+4.Push to GitHub: git push origin feature-name
+
+5.Submit a Pull Request
+
