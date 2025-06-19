@@ -3,7 +3,7 @@ A full-stack job portal for seamless job searching and hiring, built with React.
 
 📖 About
 This is a full-stack web application that enables job seekers to search and apply for jobs while allowing employers to post and manage job listings. It is a customized version of an open-source job portal, featuring a modern UI, advanced search filters, and robust backend APIs.
-📸 Screenshots
+
 
 🛠️ Tech Stack
 
