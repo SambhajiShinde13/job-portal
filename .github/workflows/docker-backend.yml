@@ -1,9 +1,9 @@
-name: Build and Push Docker Image
+name: Build and Push Backend Docker Image
 
 on:
   push:
     branches:
-      - main   # runs when you push to main branch
+      - main
 
 jobs:
   build:
