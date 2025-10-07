@@ -2,15 +2,15 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 import { removeUser } from "../Slices/UserSlice";
 import { removeJwt } from "../Slices/JwtSlice";
 
-// Base axios instance pointing to your backend
+// ✅ Use API URL from environment (.env)
 const axiosInstance = axios.create({
-  baseURL: "http://careerpoint.duckdns.org", // backend URL
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:8080/api",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Attach JWT token to each request if exists
+// ✅ Attach JWT token (if exists)
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem("token");
@@ -22,7 +22,7 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Global response interceptor for 401
+// ✅ Handle 401 Unauthorized globally
 export const setupResponseInterceptor = (navigate: any, dispatch: any) => {
   axiosInstance.interceptors.response.use(
     (response) => response,

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const base_url = "http://careerpoint.duckdns.org/auth/";
+const base_url = process.env.REACT_APP_API_URL;
 
 const loginUser = async (login: any) => {
   return axios
