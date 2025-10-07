@@ -89,7 +89,7 @@ const SignUp = () => {
         value={data.password}
         onChange={handleChange}
         error={errors.password}
-        icon={<IconLock size={16} />}
+       leftSection={<IconLock size={16} />}
         withAsterisk
         mt="sm"
       />
@@ -100,7 +100,7 @@ const SignUp = () => {
         value={data.confirmPassword}
         onChange={handleChange}
         error={errors.confirmPassword}
-        icon={<IconLock size={16} />}
+        leftSection={<IconAt size={16} />}
         withAsterisk
         mt="sm"
       />

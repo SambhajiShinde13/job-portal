@@ -72,7 +72,7 @@ const Login = () => {
         value={data.password}
         onChange={handleChange}
         error={errors.password}
-        icon={<IconLock size={16} />}
+       leftSection={<IconLock size={16} />}
         withAsterisk
         mt="sm"
       />
