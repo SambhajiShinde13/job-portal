@@ -7,7 +7,7 @@ import { errorNotification, successNotification } from "../../Services/Notificat
 import { useDispatch } from "react-redux";
 import { setUser } from "../../Slices/UserSlice";
 import { setJwt } from "../../Slices/JwtSlice";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const dispatch = useDispatch();
