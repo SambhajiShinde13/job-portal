@@ -1,9 +1,25 @@
-import axios from 'axios';
-const base_url = "http://localhost:8080/auth/"
-const loginUser = async (login:any)=> {
-    return axios.post(`${base_url}login`, login)
-        .then((result:any) => result.data)
-        .catch((error:any) =>{throw error;});
+import axiosInstance from "./axiosInstance";
+
+interface LoginPayload {
+    email: string;
+    password: string;
 }
 
-export {loginUser};
+interface LoginResponse {
+    token: string;
+    user: {
+        name: string;
+        email: string;
+        [key: string]: any;
+    };
+}
+
+export const loginUser = async (login: LoginPayload): Promise<LoginResponse> => {
+    try {
+        const response = await axiosInstance.post("/login", login);
+        return response.data;
+    } catch (error: any) {
+        console.error("Login error:", error.response?.data || error.message);
+        throw error;
+    }
+};
