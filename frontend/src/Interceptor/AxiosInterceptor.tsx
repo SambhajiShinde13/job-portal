@@ -1,10 +1,11 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 import { removeUser } from "../Slices/UserSlice";
 import { removeJwt } from "../Slices/JwtSlice";
+import API_BASE_URL from './config';
 
 // ✅ Use API URL from environment (.env)
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://localhost:8080/api",
+  baseURL: API_BASE_URL || "http://localhost:8080/api",
   headers: {
     "Content-Type": "application/json",
   },

@@ -1,6 +1,7 @@
 import axios from "axios";
+import API_BASE_URL from './config';
 
-const base_url = process.env.REACT_APP_API_URL;
+const base_url = API_BASE_URL;
 
 const loginUser = async (login: any) => {
   return axios
