@@ -1,135 +1,96 @@
+
 import { Button, LoadingOverlay, PasswordInput, Radio, TextInput } from "@mantine/core";
-import { IconAt, IconLock } from "@tabler/icons-react";
+import { IconAt,  IconLock} from "@tabler/icons-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../Services/UserService";
+import { signupValidation } from "../../Services/FormValidation";
 import { errorNotification, successNotification } from "../../Services/NotificationService";
 
 const SignUp = () => {
-  const navigate = useNavigate();
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    accountType: "APPLICANT",
-  });
-  const [errors, setErrors] = useState({ name: "", email: "", password: "", confirmPassword: "" });
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e: any) => {
-    if (typeof e === "string") {
-      setData({ ...data, accountType: e });
-      return;
+    const form = {
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        accountType: "APPLICANT"
     }
-    const { name, value } = e.target;
-    setData({ ...data, [name]: value });
-
-    // Simple validation
-    setErrors((prev) => ({
-      ...prev,
-      [name]: value ? "" : `${name} is required`,
-      ...(name === "password" && data.confirmPassword && { confirmPassword: value !== data.confirmPassword ? "Passwords do not match" : "" }),
-      ...(name === "confirmPassword" && { confirmPassword: value !== data.password ? "Passwords do not match" : "" }),
-    }));
-  };
-
-  const handleSubmit = async () => {
-    // Basic validation
-    let valid = true;
-    const newErrors: any = {};
-    Object.keys(data).forEach((key) => {
-      if (!data[key]) { newErrors[key] = `${key} is required`; valid = false; }
-    });
-    if (data.password !== data.confirmPassword) { newErrors.confirmPassword = "Passwords do not match"; valid = false; }
-    setErrors(newErrors);
-    if (!valid) return;
-
-    try {
-      setLoading(true);
-      await registerUser(data);
-      successNotification("Registered Successfully", "Redirecting to login...");
-      setTimeout(() => navigate("/login"), 2000);
-    } catch (err: any) {
-      errorNotification("Registration Failed", err.response?.data?.errorMessage || err.message);
-    } finally {
-      setLoading(false);
+    const [data, setData] = useState<{[key:string]:string}>(form);
+    const [formError, setFormError] = useState<{[key:string]:string}>(form);
+    const [loading, setLoading] = useState(false);
+    const navigate=useNavigate();
+    const handleChange = (event: any) => {
+        if (typeof (event) == "string") {
+            setData({ ...data, accountType: event });
+            return;
+        }
+        let name = event.target.name, value = event.target.value;
+        setData({ ...data, [name]: value });
+        setFormError({ ...formError, [name]: signupValidation(name, value) });
+        if (name === "password" && data.confirmPassword !== "") {
+            let err="";
+            if (data.confirmPassword !== value) err= "Passwords do not match." ;
+            setFormError({ ...formError, [name]: signupValidation(name, value) , confirmPassword:err });
+        }
+        if (name === "confirmPassword") {
+            if (data.password !== value) setFormError({ ...formError, [name]: "Passwords do not match." });
+            else setFormError({ ...formError, confirmPassword: "" });
+        }
     }
-  };
+    const handleSubmit = () => {
+        setLoading(true);
+        let valid=true, newFormError:{[key:string]:string}={};
+        for(let key in data){
+            if(key==="accountType")continue;
+            if(key!=="confirmPassword")newFormError[key]=signupValidation(key, data[key]);
+            else if(data[key]!==data["password"])newFormError[key]="Passwords do not match.";
+            if(newFormError[key])valid=false;
+        }
+        setFormError(newFormError);
+        if(valid===true){
+            registerUser(data).then((res) => {
+                setData(form);
+                successNotification("Registered Successfully", "Redirecting to login page...");
+                
+                  setTimeout(()=>{
+                    navigate("/login");
+                    setLoading(false);
+                  }, 4000)
+            }).catch((err) => {
+                console.log(err);
+                setLoading(false);
+              errorNotification("Registration Failed", err.response.data.errorMessage);
+        });
 
-  return (
-    <div className="w-full max-w-md mx-auto mt-20 p-6 border rounded-lg shadow-md">
-      <LoadingOverlay visible={loading} overlayProps={{ blur: 2 }} />
-      <h2 className="text-2xl font-semibold mb-4">Create Account</h2>
+        }
+    }
+    return <><LoadingOverlay
+    visible={loading}
+    zIndex={1000}
+    className=" translate-x-1/2"
+    overlayProps={{ radius: 'sm', blur: 2 }}
+    loaderProps={{ color: 'brightSun.4', type: 'bars' }}
+  /> <div   className="w-1/2 sm-mx:py-20 sm-mx:w-full px-20 bs-mx:px-10 md-mx:px-5 flex flex-col gap-3 justify-center">
+        <div className="text-2xl font-semibold">Create Account</div>
+        <TextInput value={data.name} error={formError.name} name="name" onChange={handleChange} label="Full Name" withAsterisk placeholder="Your name" />
+        <TextInput error={formError.email} value={data.email} name="email" onChange={handleChange} leftSection={<IconAt size={16} />} label="Email" withAsterisk placeholder="Your email" />
+        <PasswordInput value={data.password} error={formError.password} name="password" onChange={handleChange} leftSection={<IconLock size={16} />} label="Password" withAsterisk placeholder="Password" />
 
-      <TextInput
-        label="Full Name"
-        placeholder="Your name"
-        name="name"
-        value={data.name}
-        onChange={handleChange}
-        error={errors.name}
-        withAsterisk
-      />
-      <TextInput
-        label="Email"
-        placeholder="Your email"
-        name="email"
-        value={data.email}
-        onChange={handleChange}
-        error={errors.email}
-        icon={<IconAt size={16} />}
-        withAsterisk
-        mt="sm"
-      />
-      <PasswordInput
-        label="Password"
-        placeholder="Password"
-        name="password"
-        value={data.password}
-        onChange={handleChange}
-        error={errors.password}
-       leftSection={<IconLock size={16} />}
-        withAsterisk
-        mt="sm"
-      />
-      <PasswordInput
-        label="Confirm Password"
-        placeholder="Confirm password"
-        name="confirmPassword"
-        value={data.confirmPassword}
-        onChange={handleChange}
-        error={errors.confirmPassword}
-        leftSection={<IconAt size={16} />}
-        withAsterisk
-        mt="sm"
-      />
+        <PasswordInput value={data.confirmPassword} error={formError.confirmPassword} name="confirmPassword" onChange={handleChange} leftSection={<IconLock size={16} />} label="Confirm Password" withAsterisk placeholder="Confirm password" />
+        <Radio.Group
+            value={data.accountType}
+            onChange={handleChange}
+            label="You are?"
+            withAsterisk
+        >
+            <div className="flex gap-6 xs-mx:gap-3">
+                <Radio name="accountType" className="py-4 px-6 sm-mx:px-4 sm-mx:py-2 hover:bg-mine-shaft-900 border-mine-shaft-800 border rounded-lg has-[:checked]:!border-bright-sun-400"   value="APPLICANT" label="Applicant" />
+                <Radio name="accountType" className="py-4 px-6 sm-mx:px-4 sm-mx:py-2 hover:bg-mine-shaft-900 border-mine-shaft-800 border rounded-lg has-[:checked]:!border-bright-sun-400"  value="EMPLOYER" label="Employer" />
+            </div>
+        </Radio.Group>
+        <Button loading={loading} onClick={handleSubmit} autoContrast variant="filled">Sign up</Button>
+        <div className="text-center sm-mx:text-sm xs-mx:text-xs">Have an account?  <span className="text-bright-sun-400 hover:underline cursor-pointer sm-mx:text-sm xs-mx:text-xs" onClick={()=>{navigate("/login");setFormError(form) ;setData(form)}}>Login</span> </div>
 
-      <Radio.Group
-        value={data.accountType}
-        onChange={handleChange}
-        label="You are?"
-        withAsterisk
-        mt="sm"
-      >
-        <div className="flex gap-4 mt-2">
-          <Radio value="APPLICANT" label="Applicant" />
-          <Radio value="EMPLOYER" label="Employer" />
-        </div>
-      </Radio.Group>
-
-      <Button fullWidth mt="md" onClick={handleSubmit} loading={loading}>
-        Sign Up
-      </Button>
-
-      <div className="text-center mt-4">
-        Already have an account?{" "}
-        <span className="text-blue-500 cursor-pointer" onClick={() => navigate("/login")}>
-          Login
-        </span>
-      </div>
-    </div>
-  );
-};
-
+    </div></>
+}
 export default SignUp;
