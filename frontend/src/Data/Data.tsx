@@ -53,7 +53,6 @@ const jobCategory = [
   }
 ];
 
-// 🖼️ Updated Work Section with Image Paths
 const work = [
   {
     "name": "Build Your Resume",
@@ -69,6 +68,11 @@ const work = [
     "name": "Get Hired",
     "desc": "Connect with employers and start your new job.",
     "img": "/Working/get_hired.png"
+  },
+  {
+    "name": "Career Growth",
+    "desc": "Empower your career with continuous learning and opportunities.",
+    "img": "/Working/girl.png"
   }
 ];
 
