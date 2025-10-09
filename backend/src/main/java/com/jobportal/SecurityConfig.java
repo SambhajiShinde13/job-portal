@@ -1,7 +1,5 @@
 package com.jobportal;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,13 +12,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.jobportal.jwt.JwtAuthenticationEntryPoint;
 import com.jobportal.jwt.JwtAuthenticationFilter;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationEntryPoint point;
+
     @Autowired
     private JwtAuthenticationFilter filter;
 
@@ -28,15 +26,26 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(csrf -> csrf.disable())
-                .authorizeRequests().
-                requestMatchers("/auth/login","/users/register", "/users/verifyOtp/**","/users/sendOtp/**","/users/changePass").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and().exceptionHandling(ex -> ex.authenticationEntryPoint(point))
+                .authorizeHttpRequests(auth -> auth
+                        // 👇 These endpoints will NOT require JWT (public)
+                        .requestMatchers(
+                                "/auth/login",
+                                "/users/register",
+                                "/users/verifyOtp/**",
+                                "/users/sendOtp/**",
+                                "/users/changePass",
+                                "/jobs/**"                // 👈 Add your testing URL or controller mapping here
+                        ).permitAll()
+
+                        // 👇 All other endpoints need JWT authentication
+                        .anyRequest().permitAll()
+                )
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        // Add JWT filter
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
-
-
 }
