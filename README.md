@@ -2,6 +2,7 @@
 
 ![Banner](https://github.com/Sambha13/job-portal/blob/master/banner.png?raw=true)
 
+
 > A fully-featured **Job Portal Web Application** built with **React.js**, **Spring Boot**, and **MongoDB**.  
 > It allows **job seekers** to register and apply for jobs, while **employers** can post and manage job openings.  
 > The platform includes **JWT-based authentication**, **MongoDB integration**, and a modern, responsive UI.
