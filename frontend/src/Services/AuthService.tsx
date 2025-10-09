@@ -6,4 +6,5 @@ const loginUser = async (login: any) => {
         .catch((error: any) => { throw error; });
 }
 
+
 export { loginUser };
