@@ -17,7 +17,7 @@ public class GlobalCorsConfig {
         config.setAllowCredentials(true); // allow cookies/auth headers
         config.setAllowedOrigins(Arrays.asList("http://98.84.156.46")); // frontend URL
         config.setAllowedHeaders(Arrays.asList("*")); // allow all headers
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // all HTTP methods
         config.setExposedHeaders(Arrays.asList("Authorization")); // expose JWT if needed
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
