@@ -23,10 +23,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers(
-                                "/users/register",
-                                "/users/login",
-                                "/users/sendOtp/**",
-                                "/users/verifyOtp/**"
+                                "/api/users/register",
+                                "/api/users/login",
+                                "/api/users/sendOtp/**",
+                                "/api/users/verifyOtp/**"
                         ).permitAll()
                         // Allow preflight OPTIONS requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
