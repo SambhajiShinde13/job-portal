@@ -14,15 +14,15 @@ public class GlobalCorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true); // allow cookies/auth headers
-        config.setAllowedOrigins(Arrays.asList("http://98.84.156.46")); // frontend URL
-        config.setAllowedHeaders(Arrays.asList("*")); // allow all headers
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // all HTTP methods
-        config.setExposedHeaders(Arrays.asList("Authorization")); // expose JWT if needed
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*");  // allow all origins
+        config.addAllowedHeader("*");          // allow all headers
+        config.addAllowedMethod("*");          // allow all HTTP methods
+        config.setExposedHeaders(List.of("Authorization"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-
         return new CorsFilter(source);
     }
 }
+
