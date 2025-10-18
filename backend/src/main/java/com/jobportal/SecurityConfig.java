@@ -2,41 +2,44 @@ package com.jobportal;
 
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.jobportal.jwt.JwtAuthenticationEntryPoint;
 import com.jobportal.jwt.JwtAuthenticationFilter;
-
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
-    private JwtAuthenticationEntryPoint point;
-    @Autowired
-    private JwtAuthenticationFilter filter;
+    private JwtAuthenticationFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable()) // disable CSRF for APIs
+                .authorizeHttpRequests(auth -> auth
+                        // Public endpoints
+                        .requestMatchers(
+                                "/api/users/register",
+                                "/api/users/login",
+                                "/api/users/sendOtp/**",
+                                "/api/users/verifyOtp/**"
+                        ).permitAll()
+                        // Allow preflight OPTIONS requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // All other requests require authentication
+                        .anyRequest().authenticated()
+                )
+                // Add JWT filter before Spring Security's username/password filter
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                // CORS handled by GlobalCorsConfig
+                .cors(cors -> {});
 
-        http.csrf(csrf -> csrf.disable())
-                .authorizeRequests().
-                requestMatchers("/auth/login","/users/register", "/users/verifyOtp/**","/users/sendOtp/**","/users/changePass").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and().exceptionHandling(ex -> ex.authenticationEntryPoint(point))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
-
 }
