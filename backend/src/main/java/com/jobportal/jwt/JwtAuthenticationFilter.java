@@ -33,8 +33,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // Skip JWT validation for public endpoints
-        if (path.startsWith("/users/register") || path.startsWith("/users/login")) {
+        // 🔓 Public endpoints that DON'T need JWT
+        if (path.startsWith("/auth/login") ||             // AuthAPI login
+                path.startsWith("/api/users/register") ||     // user registration
+                path.startsWith("/api/users/login") ||        // old login path if used anywhere
+                path.startsWith("/api/users/sendOtp") ||
+                path.startsWith("/api/users/verifyOtp") ||
+                "OPTIONS".equalsIgnoreCase(request.getMethod())) { // allow preflight
             filterChain.doFilter(request, response);
             return;
         }
@@ -76,4 +81,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
+
 }

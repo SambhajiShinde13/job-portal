@@ -25,16 +25,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers(
+                                "/auth/login",              // ⬅️ Add this
                                 "/api/users/register",
                                 "/api/users/login",
                                 "/api/users/sendOtp/**",
                                 "/api/users/verifyOtp/**"
                         ).permitAll()
-                        // Allow preflight OPTIONS requests
+                        // Allow preflight OPTIONS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // All other requests require authentication
+                        // Everything else requires authentication
                         .anyRequest().authenticated()
                 )
+
                 // Add JWT filter before Spring Security's username/password filter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 // CORS handled by GlobalCorsConfig
