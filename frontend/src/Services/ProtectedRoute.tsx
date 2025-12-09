@@ -1,4 +1,4 @@
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
