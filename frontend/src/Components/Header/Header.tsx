@@ -1,96 +1,108 @@
 import { Avatar, Burger, Button, Drawer, Indicator } from "@mantine/core";
-import { IconAnchor, IconAsset, IconBell, IconSettings, IconX } from "@tabler/icons-react";
+import { IconAnchor, IconBell, IconSettings, IconX } from "@tabler/icons-react";
 import NavLinks from "./NavLinks";
 import ProfileMenu from "./ProfileMenu";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getProfile } from "../../Services/ProfileService";
-import { setProfile } from "../../Slices/ProfileSlice";
 import NotiMenu from "./NotiMenu";
- import jwtDecode from "jwt-decode";
-import { setUser } from "../../Slices/UserSlice";
 import { setupResponseInterceptor } from "../../Interceptor/AxiosInterceptor";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { hideOverlay, showOverlay } from "../../Slices/OverlaySlice";
+import { useDisclosure } from "@mantine/hooks";
 
 const links = [
-    { name: "Find Jobs", url: "find-jobs" },
-    { name: "Find Talent", url: "find-talent" },
-    { name: "Post Job", url: "post-job/0" },
-    { name: "Posted Jobs", url: "posted-jobs/0" },
-    { name: "Job History", url: "job-history" }
-]
+  { name: "Find Jobs", url: "find-jobs" },
+  { name: "Find Talent", url: "find-talent" },
+  { name: "Post Job", url: "post-job/0" },
+  { name: "Posted Jobs", url: "posted-jobs/0" },
+  { name: "Job History", url: "job-history" },
+];
 
 const Header = () => {
-    const [opened, { open, close }] = useDisclosure(false);
-    const dispatch = useDispatch();
-    const user = useSelector((state: any) => state.user);
-    const token = useSelector((state: any) => state.jwt);
-    const location = useLocation();
-    const navigate = useNavigate();
-    useEffect(() => {
-        setupResponseInterceptor(navigate, dispatch);
+  const [opened, { open, close }] = useDisclosure(false);
+  const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.user);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    }, [navigate])
-    const handleClick = (url: string) => {
-        navigate(url)
-        close();
-    }
-        useEffect(() => {
-        const storedToken = localStorage.getItem("token");
+  useEffect(() => {
+    // set up axios interceptor once
+    setupResponseInterceptor(navigate, dispatch);
+  }, [navigate, dispatch]);
 
-        if (token && storedToken) {
-            try {
-                const decoded: any = jwtDecode(storedToken);
-                dispatch(setUser({ ...decoded, email: decoded.sub }));
-            } catch (err) {
-                console.error("Invalid token in localStorage, clearing it", err);
-                localStorage.removeItem("token");
-                // optionally also clear user state:
-                // dispatch(removeUser());
-            }
-        }
+  const handleClick = (url: string) => {
+    navigate(url);
+    close();
+  };
 
-        if (user?.profileId) {
-            getProfile(user.profileId)
-                .then((res) => {
-                    dispatch(setProfile(res));
-                })
-                .catch((err) => console.log(err));
-        }
-    }, [token, user?.profileId, dispatch, navigate]);
+  // Hide header on auth pages
+  if (location.pathname === "/signup" || location.pathname === "/login") {
+    return null;
+  }
 
-    return (location.pathname != "/signup" && location.pathname != "/login") ? <div data-aos="zoom-out" className="w-full bg-mine-shaft-950 px-6 text-white h-20 flex justify-between items-center font-['poppins']">
-        <div onClick={() => navigate("/")} className="flex gap-1 cursor-pointer items-center text-bright-sun-400">
-            <IconAnchor className="h-8 w-8" stroke={2.5} />
-            <div className=" xs-mx:hidden text-3xl font-semibold">JobHook</div>
-        </div>
-        {NavLinks()}
-        <div className="flex gap-3 items-center">
+  return (
+    <div
+      data-aos="zoom-out"
+      className="w-full bg-mine-shaft-950 px-6 text-white h-20 flex justify-between items-center font-['poppins']"
+    >
+      <div
+        onClick={() => navigate("/")}
+        className="flex gap-1 cursor-pointer items-center text-bright-sun-400"
+      >
+        <IconAnchor className="h-8 w-8" stroke={2.5} />
+        <div className=" xs-mx:hidden text-3xl font-semibold">JobHook</div>
+      </div>
 
-            {user ? <ProfileMenu /> : <Link to="/login" className="text-mine-shaft-200 hover:text-bright-sun-400 "><Button color="brightSun.4" variant="subtle">Login</Button></Link>}
-            {/* <div className=" bg-mine-shaft-900 p-1.5 rounded-full">
-                <IconSettings stroke={1.5} />
-            </div> */}
-            {user ? <NotiMenu /> : <></>}
-            {
+      {NavLinks()}
 
-            }
-            <Burger className="bs:hidden" opened={opened} onClick={open} aria-label="Toggle navigation" />
-            <Drawer size="xs" overlayProps={{ backgroundOpacity: 0.5, blur: 4 }} position="right" opened={opened} onClose={close} closeButtonProps={{
-                icon: <IconX size={30} />,
-            }} >
-                <div className="flex flex-col gap-6 items-center">
+      <div className="flex gap-3 items-center">
+        {user ? (
+          <ProfileMenu />
+        ) : (
+          <Link
+            to="/login"
+            className="text-mine-shaft-200 hover:text-bright-sun-400 "
+          >
+            <Button color="brightSun.4" variant="subtle">
+              Login
+            </Button>
+          </Link>
+        )}
 
-                    {
-                        links.map((link, index) => <div key={index} className=" h-full flex items-center">
-                            <div className="hover:text-bright-sun-400 text-xl " key={index} onClick={() => handleClick(link.url)} >{link.name}</div>
-                        </div>)
-                    }
+        {user ? <NotiMenu /> : null}
+
+        <Burger
+          className="bs:hidden"
+          opened={opened}
+          onClick={open}
+          aria-label="Toggle navigation"
+        />
+
+        <Drawer
+          size="xs"
+          overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
+          position="right"
+          opened={opened}
+          onClose={close}
+          closeButtonProps={{
+            icon: <IconX size={30} />,
+          }}
+        >
+          <div className="flex flex-col gap-6 items-center">
+            {links.map((link, index) => (
+              <div key={index} className="h-full flex items-center">
+                <div
+                  className="hover:text-bright-sun-400 text-xl"
+                  onClick={() => handleClick(link.url)}
+                >
+                  {link.name}
                 </div>
-            </Drawer>
-        </div>
-    </div> : <></>
-}
+              </div>
+            ))}
+          </div>
+        </Drawer>
+      </div>
+    </div>
+  );
+};
+
 export default Header;
