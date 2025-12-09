@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { getProfile } from "../../Services/ProfileService";
 import { setProfile } from "../../Slices/ProfileSlice";
 import NotiMenu from "./NotiMenu";
-import { jwtDecode } from "jwt-decode";
+ import jwtDecode from "jwt-decode";
 import { setUser } from "../../Slices/UserSlice";
 import { setupResponseInterceptor } from "../../Interceptor/AxiosInterceptor";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
@@ -37,21 +37,30 @@ const Header = () => {
         navigate(url)
         close();
     }
-    useEffect(() => {
-        if (token) {
-            if (localStorage.getItem("token")) {
-                const decoded = jwtDecode(localStorage.getItem("token") || "");
+        useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+
+        if (token && storedToken) {
+            try {
+                const decoded: any = jwtDecode(storedToken);
                 dispatch(setUser({ ...decoded, email: decoded.sub }));
+            } catch (err) {
+                console.error("Invalid token in localStorage, clearing it", err);
+                localStorage.removeItem("token");
+                // optionally also clear user state:
+                // dispatch(removeUser());
             }
         }
+
         if (user?.profileId) {
-            // dispatch(showOverlay())
-            getProfile(user?.profileId).then((res) => {
-                dispatch(setProfile(res));
-            }).catch((err) => console.log(err))
-            // .finally(()=>dispatch(hideOverlay()));
+            getProfile(user.profileId)
+                .then((res) => {
+                    dispatch(setProfile(res));
+                })
+                .catch((err) => console.log(err));
         }
-    }, [token, navigate]);
+    }, [token, user?.profileId, dispatch, navigate]);
+
     return (location.pathname != "/signup" && location.pathname != "/login") ? <div data-aos="zoom-out" className="w-full bg-mine-shaft-950 px-6 text-white h-20 flex justify-between items-center font-['poppins']">
         <div onClick={() => navigate("/")} className="flex gap-1 cursor-pointer items-center text-bright-sun-400">
             <IconAnchor className="h-8 w-8" stroke={2.5} />
