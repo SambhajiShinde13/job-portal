@@ -1,13 +1,8 @@
 import axiosInstance from "../Interceptor/AxiosInterceptor";
 
-export interface LoginPayload {
-  email: string;
-  password: string;
-}
-
-const loginUser = async (login: LoginPayload) => {
-  const res = await axiosInstance.post("/users/login", login); // ✅ correct path
-  return res.data; // backend returns { id, name, email, profileId, ... }
+const loginUser = async (login: any) => {
+  const res = await axiosInstance.post("/users/login", login);  // ✅ correct endpoint
+  return res.data;                                              // user JSON from backend
 };
 
 export { loginUser };
