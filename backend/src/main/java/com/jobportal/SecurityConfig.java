@@ -1,7 +1,5 @@
 package com.jobportal;
 
-
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,26 +19,31 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // disable CSRF for APIs
+                // Disable CSRF for stateless REST API
+                .csrf(csrf -> csrf.disable())
+
+                // CORS handled by GlobalCorsConfig
+                .cors(cors -> {})
+
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
+                        // 🔓 Public endpoints (no JWT required)
                         .requestMatchers(
-                                "/auth/login",              // ⬅️ Add this
+                                "/auth/login",               // <-- AuthAPI login
                                 "/api/users/register",
                                 "/api/users/login",
                                 "/api/users/sendOtp/**",
                                 "/api/users/verifyOtp/**"
                         ).permitAll()
+
                         // Allow preflight OPTIONS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                         // Everything else requires authentication
                         .anyRequest().authenticated()
                 )
 
-                // Add JWT filter before Spring Security's username/password filter
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                // CORS handled by GlobalCorsConfig
-                .cors(cors -> {});
+                // Add JWT filter
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

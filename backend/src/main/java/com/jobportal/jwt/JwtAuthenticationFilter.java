@@ -1,6 +1,7 @@
 package com.jobportal.jwt;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,19 +28,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    // 🔓 Public endpoints (no JWT required)
+    private static final List<String> WHITELIST = List.of(
+            "/auth/login",
+            "/api/users/register",
+            "/api/users/login",
+            "/api/users/sendOtp",
+            "/api/users/verifyOtp"
+    );
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
 
-        // 🔓 Public endpoints that DON'T need JWT
-        if (path.startsWith("/auth/login") ||             // AuthAPI login
-                path.startsWith("/api/users/register") ||     // user registration
-                path.startsWith("/api/users/login") ||        // old login path if used anywhere
-                path.startsWith("/api/users/sendOtp") ||
-                path.startsWith("/api/users/verifyOtp") ||
-                "OPTIONS".equalsIgnoreCase(request.getMethod())) { // allow preflight
+        // Skip JWT validation for public endpoints + OPTIONS
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())
+                || WHITELIST.stream().anyMatch(path::startsWith)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -81,6 +89,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
-
 }
