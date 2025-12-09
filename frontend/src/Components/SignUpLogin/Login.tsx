@@ -10,7 +10,8 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../Slices/UserSlice";
 import { setJwt } from "../../Slices/JwtSlice";
 import { loginUser } from "../../Services/AuthService";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+
 
 const Login = () => {
     const dispatch = useDispatch();
