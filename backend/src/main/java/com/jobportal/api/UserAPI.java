@@ -25,7 +25,7 @@ import jakarta.validation.constraints.Pattern;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @Validated
 public class UserAPI {
 	@Autowired

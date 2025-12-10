@@ -19,30 +19,38 @@ import com.jobportal.jwt.AuthenticationResponse;
 import com.jobportal.jwt.JwtHelper;
 
 @RestController
-@CrossOrigin
+// Allow requests from your frontend domain
+@CrossOrigin(origins = "http://careerpoint.duckdns.org", allowedHeaders = "*")
 @RequestMapping("/auth")
 public class AuthAPI {
+
 	@Autowired
 	private UserDetailsService userDetailsService;
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Autowired
 	private JwtHelper jwtHelper;
-	
+
 	@PostMapping("/login")
-	public ResponseEntity<?>createAuthenticationToken(@RequestBody AuthenticationRequest request) throws JobPortalException{
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest request) throws JobPortalException {
 		try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-            );
-        } catch (AuthenticationException e) {
-            throw new JobPortalException("Incorrect username or password");
-        }
+			// Authenticate user
+			authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+			);
+		} catch (AuthenticationException e) {
+			throw new JobPortalException("Incorrect email or password");
+		}
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-        final String jwt = jwtHelper.generateToken(userDetails);
+		// Load user details
+		final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+		// Generate JWT token
+		final String jwt = jwtHelper.generateToken(userDetails);
+
+		// Return JWT in response
+		return ResponseEntity.ok(new AuthenticationResponse(jwt));
 	}
 }

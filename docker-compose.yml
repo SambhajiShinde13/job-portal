@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:6.0
+    container_name: jobportal_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    image: sambhashinde1313/jobportal:latest
+    container_name: jobportal_backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    container_name: jobportal_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
