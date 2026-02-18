@@ -3,7 +3,7 @@ import { removeUser } from "../Slices/UserSlice";
 import { removeJwt } from "../Slices/JwtSlice";
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8080'
+    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8080'  // USE ENV VARIABLE
 });
 
 axiosInstance.interceptors.request.use(
@@ -26,7 +26,6 @@ export const setupResponseInterceptor = (navigate: any, dispatch: any) => {
         },
         (error) => {
             if (error.response?.status === 401) {
-
                 dispatch(removeUser());
                 dispatch(removeJwt());
                 navigate('/login');
