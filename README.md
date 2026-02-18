@@ -1,4 +1,4 @@
-# 🧑‍💼 Job Portal – Full Stack Web Application
+# 🧑‍💼 sambhaji Job Portal – Full Stack Web Application
 
 ![Banner](https://github.com/Sambha13/job-portal/blob/master/banner.png?raw=true)
 
